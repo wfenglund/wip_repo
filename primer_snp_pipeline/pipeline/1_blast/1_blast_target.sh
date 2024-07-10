@@ -11,4 +11,4 @@ cd $PROJECT_DIR/primer_snp_pipeline/pipeline/1_blast
 module load bioinfo-tools blast
 
 # blast sequences:
-blastn -query ./$BLAST_DB -db nt -out ./blast.out -outfmt "6 sacc sstart send evalue pident sscinames" -max_target_seqs 10 -num_threads 20
+blastn -query ./sequences.fa -db ./$BLAST_DB -out ./blast.out -outfmt "6 sacc sstart send evalue pident sscinames" -max_target_seqs 10 -num_threads 20
