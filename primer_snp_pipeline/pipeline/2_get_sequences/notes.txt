@@ -1,0 +1,1 @@
+If the sequence has been found reverse complemented they will not be extracted with this step since the start and stop values are reversed, and blastdbcmd does not accept ranges like that.
