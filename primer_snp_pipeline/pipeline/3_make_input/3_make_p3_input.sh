@@ -26,6 +26,7 @@ do
   touch $output
   echo "SEQUENCE_ID=$fasta_name" >> $output
   echo "SEQUENCE_TEMPLATE=$conseq" >> $output
-  echo "SEQUENCE_PRIMER=$fw_primer" >> $output
+  ## add the first 36 characters of primer (p3 limitation) to output:
+  echo "SEQUENCE_PRIMER=${fw_primer:0:36}" >> $output
   cat primer3_settings.txt >> $output
 done
