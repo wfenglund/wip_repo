@@ -1,7 +1,8 @@
+# Load software modules:
 module load bioinfo-tools
 module load emboss
 
-# make a primer3 input file for each locus:
+# Make a primer3 input file for each locus:
 make_inputs()
 {
   for fasta_file in ../2_get_sequences/fasta_files/*.fa
