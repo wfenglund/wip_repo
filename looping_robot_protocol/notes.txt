@@ -1,0 +1,10 @@
+# Installing and using opentrons simulation on uppmax:
+
+## Load python:
+module load python/3.10.8
+
+## Install opentrons:
+pip install opentrons
+
+## Run simulation:
+~/.local/bin/opentrons_simulate protocol.py
