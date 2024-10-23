@@ -1,3 +1,7 @@
+# General:
+The protocol now seems to loop over columns and run (at max) 4 columns at a time.
+- There are possible problems with keeping track of used tips, but this will be tested.
+
 # Installing and using opentrons simulation on uppmax:
 
 ## Load python:
