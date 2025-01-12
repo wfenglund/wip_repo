@@ -1,4 +1,5 @@
 import pygame
+import test_ai
 
 def translate_map_char(map_file, character): # Get all coordinates of a character in a map file
     with open(map_file) as raw_map:
@@ -26,6 +27,8 @@ def start_game():
     y = 475 # starting y coordinate
     one_tile = 25 # determine fundamental unit of measurement
     run = True
+    prev_x = x
+    prev_y = y
 
     # Start game loop:
     while run:
@@ -59,6 +62,12 @@ def start_game():
             if y < 475 and [x, y + one_tile] not in no_walk_list:
                 y = y + one_tile
             print(f'{x},{y}')
+
+        # start testing with ai-wandering:
+        x, y = test_ai.move_mob(prev_x, prev_y, x, y, one_tile, no_walk_list)
+        # store current x and y for this purpose:
+        prev_x = x
+        prev_y = y
 
         game_window.fill((0,0,0))  # fill screen with black
         draw_all_coor(game_window, 'map1.txt', '0', (128,128,128)) # draw all '0' characters as dark gray
