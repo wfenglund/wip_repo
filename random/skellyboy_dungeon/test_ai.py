@@ -1,6 +1,8 @@
 import random
+import pygame
 
 def pick_direction(old_x, old_y, cur_x, cur_y, step):
+    pygame.time.delay(10)
     perc = random.random()
     x_diff = cur_x - old_x
     y_diff = cur_y - old_y
@@ -16,22 +18,22 @@ def pick_direction(old_x, old_y, cur_x, cur_y, step):
         if perc < 1.00:
             y_ch = -1
 
-    if perc < 0.50: # continue on path
+    if perc < 0.75: # continue on path
         print('forward')
         new_x = cur_x + (step * x_ch)
         new_y = cur_y + (step * y_ch)
-    elif perc >= 0.50 and perc < 0.60: # turn left
+    elif perc >= 0.75 and perc < 0.80: # turn left
         print('left')
         new_x = cur_x + (step * y_ch)
         new_y = cur_y + (step * x_ch)
-    elif perc >= 0.60 and perc < 0.70: # turn right
+    elif perc >= 0.80 and perc < 0.85: # turn right
         print('right')
         new_x = cur_x + (step * (y_ch * -1))
         new_y = cur_y + (step * (x_ch * -1))
-    elif perc >= 0.70 and perc < 0.80: # go back
-        print('back')
-        new_x = cur_x + (step * (x_ch * -1))
-        new_y = cur_y + (step * (y_ch * -1))
+#     elif perc >= 0.85 and perc < 0.90: # go back
+#         print('back')
+#         new_x = cur_x + (step * (x_ch * -1))
+#         new_y = cur_y + (step * (y_ch * -1))
     elif perc >= 0.80: # stay
         print('stay')
         new_x = cur_x
