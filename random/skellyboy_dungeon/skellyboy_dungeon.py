@@ -11,10 +11,16 @@ def translate_map_char(map_file, character): # Get all coordinates of a characte
             row = row + 1
         return map_list
 
-def draw_all_coor(game_window, map_file, character, color):
+def draw_all_coor(game_window, map_file, character, color, choice):
     one_tile = 25
-    for xcoor, ycoor in translate_map_char(map_file, character): # for every instance of 'character'
-        pygame.draw.rect(game_window, color, (xcoor, ycoor, one_tile, one_tile))
+    if choice == 'color':
+        for xcoor, ycoor in translate_map_char(map_file, character): # for every instance of 'character'
+            pygame.draw.rect(game_window, color, (xcoor, ycoor, one_tile, one_tile))
+    if choice == 'picture':
+        print(color)
+        tile_test = pygame.image.load(color).convert() # load image
+        for xcoor, ycoor in translate_map_char(map_file, character): # for every instance of 'character'
+            game_window.blit(tile_test, (xcoor, ycoor))
 
 def start_game():
     # Initiate game:
@@ -64,13 +70,14 @@ def start_game():
             print(f'{x},{y}')
 
         # start testing with ai-wandering:
-        x, y = test_ai.move_mob(prev_x, prev_y, x, y, one_tile, no_walk_list)
+#         x, y = test_ai.move_mob(prev_x, prev_y, x, y, one_tile, no_walk_list)
         # store current x and y for this purpose:
         prev_x = x
         prev_y = y
 
         game_window.fill((0,0,0))  # fill screen with black
-        draw_all_coor(game_window, 'map1.txt', '0', (128,128,128)) # draw all '0' characters as dark gray
+#         draw_all_coor(game_window, 'map1.txt', '0', (128,128,128), 'color') # draw all '0' characters as dark gray
+        draw_all_coor(game_window, 'map1.txt', '0', ('tile_test.png'), 'picture') # draw all '0' characters as test tile
         pygame.draw.rect(game_window, (255,0,0), (x, y, one_tile, one_tile))  # draw player
         pygame.display.update() # update screen
         
