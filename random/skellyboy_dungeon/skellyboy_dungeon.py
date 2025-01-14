@@ -17,7 +17,6 @@ def draw_all_coor(game_window, map_file, character, color, choice):
         for xcoor, ycoor in translate_map_char(map_file, character): # for every instance of 'character'
             pygame.draw.rect(game_window, color, (xcoor, ycoor, one_tile, one_tile))
     if choice == 'picture':
-        print(color)
         tile_test = pygame.image.load(color).convert() # load image
         for xcoor, ycoor in translate_map_char(map_file, character): # for every instance of 'character'
             game_window.blit(tile_test, (xcoor, ycoor))
