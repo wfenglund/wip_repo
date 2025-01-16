@@ -11,6 +11,16 @@ def translate_map_char(map_file, character): # Get all coordinates of a characte
             row = row + 1
         return map_list
 
+def parse_mapinf(map_file):
+    connection_dict = {}
+    with open(map_file) as map_info:
+        for line in map_info:
+            if line.startswith('connection:'):
+                raw_connection = line.strip().replace('connection:', '')
+                coords, new_loc = raw_connection.split('=')
+                connection_dict[coords] = new_loc.split(':')
+    return connection_dict
+
 def draw_all_coor(game_window, map_file, character, color, choice):
     one_tile = 25
     if choice == 'color':
@@ -34,6 +44,7 @@ def start_game():
     run = True
     prev_x = x
     prev_y = y
+    cur_map = 'map1' # prefix name of the starting map
 
     # Start game loop:
     while run:
@@ -44,28 +55,41 @@ def start_game():
                 run = False  # end game loop
                 print('Game Closed')
 
-        no_walk_list = translate_map_char('map1.txt', '#') # find unwalkable tiles
+        no_walk_list = translate_map_char(cur_map + '.maplay', '#') # find unwalkable tiles
+        connection_dict = parse_mapinf(cur_map + '.mapinf')
 
         keys = pygame.key.get_pressed()
         
         if keys[pygame.K_LEFT]:
             if x > 0 and [x - one_tile, y] not in no_walk_list:
                 x = x - one_tile
+            elif str(x - one_tile) + ',' + str(y) in connection_dict.keys():
+                x = x - one_tile
+                print('connection')
             print(f'{x},{y}')
 
         if keys[pygame.K_RIGHT]:
             if x < 475 and [x + one_tile, y] not in no_walk_list:
                 x = x + one_tile
+            elif str(x + one_tile) + ',' + str(y) in connection_dict.keys():
+                x = x + one_tile
+                print('connection')
             print(f'{x},{y}')
 
         if keys[pygame.K_UP]:
             if y > 0 and [x, y - one_tile] not in no_walk_list:
                 y = y - one_tile
+            elif str(x) + ',' + str(y - one_tile) in connection_dict.keys():
+                y = y - one_tile
+                print('connection')
             print(f'{x},{y}')
 
         if keys[pygame.K_DOWN]:
             if y < 475 and [x, y + one_tile] not in no_walk_list:
                 y = y + one_tile
+            elif str(x) + ',' + str(y + one_tile) in connection_dict.keys():
+                y = y + one_tile
+                print('connection')
             print(f'{x},{y}')
 
         # start testing with ai-wandering:
@@ -74,9 +98,16 @@ def start_game():
         prev_x = x
         prev_y = y
 
+        if str(x) + ',' + str(y) in connection_dict.keys():
+            connection_info = connection_dict[str(x) + ',' + str(y)]
+            cur_map = connection_info[0].strip()
+            coord_list = connection_info[1].split(',')
+            x = int(coord_list[0].strip())
+            y = int(coord_list[1].strip())
+
         game_window.fill((0,0,0))  # fill screen with black
 #         draw_all_coor(game_window, 'map1.txt', '0', (128,128,128), 'color') # draw all '0' characters as dark gray
-        draw_all_coor(game_window, 'map1.txt', '0', ('tile_test.png'), 'picture') # draw all '0' characters as test tile
+        draw_all_coor(game_window, cur_map + '.maplay', '0', ('tile_test.png'), 'picture') # draw all '0' characters as test tile
         pygame.draw.rect(game_window, (255,0,0), (x, y, one_tile, one_tile))  # draw player
         pygame.display.update() # update screen
         
