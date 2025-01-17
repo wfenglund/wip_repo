@@ -60,7 +60,7 @@ def start_game():
 
         keys = pygame.key.get_pressed()
         
-        if keys[pygame.K_LEFT]:
+        if keys[pygame.K_LEFT] or keys[pygame.K_a]:
             if x > 0 and [x - one_tile, y] not in no_walk_list:
                 x = x - one_tile
             elif str(x - one_tile) + ',' + str(y) in connection_dict.keys():
@@ -68,7 +68,7 @@ def start_game():
                 print('connection')
             print(f'{x},{y}')
 
-        if keys[pygame.K_RIGHT]:
+        if keys[pygame.K_RIGHT] or keys[pygame.K_d]:
             if x < 475 and [x + one_tile, y] not in no_walk_list:
                 x = x + one_tile
             elif str(x + one_tile) + ',' + str(y) in connection_dict.keys():
@@ -76,7 +76,7 @@ def start_game():
                 print('connection')
             print(f'{x},{y}')
 
-        if keys[pygame.K_UP]:
+        if keys[pygame.K_UP] or keys[pygame.K_w]:
             if y > 0 and [x, y - one_tile] not in no_walk_list:
                 y = y - one_tile
             elif str(x) + ',' + str(y - one_tile) in connection_dict.keys():
@@ -84,7 +84,7 @@ def start_game():
                 print('connection')
             print(f'{x},{y}')
 
-        if keys[pygame.K_DOWN]:
+        if keys[pygame.K_DOWN] or keys[pygame.K_s]:
             if y < 475 and [x, y + one_tile] not in no_walk_list:
                 y = y + one_tile
             elif str(x) + ',' + str(y + one_tile) in connection_dict.keys():
