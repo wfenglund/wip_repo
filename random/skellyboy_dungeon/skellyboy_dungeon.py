@@ -60,23 +60,7 @@ def start_game():
 
         keys = pygame.key.get_pressed()
         
-        if keys[pygame.K_LEFT] or keys[pygame.K_a]:
-            if x > 0 and [x - one_tile, y] not in no_walk_list:
-                x = x - one_tile
-            elif str(x - one_tile) + ',' + str(y) in connection_dict.keys():
-                x = x - one_tile
-                print('connection')
-            print(f'{x},{y}')
-
-        if keys[pygame.K_RIGHT] or keys[pygame.K_d]:
-            if x < 475 and [x + one_tile, y] not in no_walk_list:
-                x = x + one_tile
-            elif str(x + one_tile) + ',' + str(y) in connection_dict.keys():
-                x = x + one_tile
-                print('connection')
-            print(f'{x},{y}')
-
-        if keys[pygame.K_UP] or keys[pygame.K_w]:
+        if (keys[pygame.K_UP] or keys[pygame.K_w]) and not keys[pygame.K_SPACE]:
             if y > 0 and [x, y - one_tile] not in no_walk_list:
                 y = y - one_tile
             elif str(x) + ',' + str(y - one_tile) in connection_dict.keys():
@@ -84,7 +68,7 @@ def start_game():
                 print('connection')
             print(f'{x},{y}')
 
-        if keys[pygame.K_DOWN] or keys[pygame.K_s]:
+        if (keys[pygame.K_DOWN] or keys[pygame.K_s]) and not keys[pygame.K_SPACE]:
             if y < 475 and [x, y + one_tile] not in no_walk_list:
                 y = y + one_tile
             elif str(x) + ',' + str(y + one_tile) in connection_dict.keys():
@@ -92,11 +76,24 @@ def start_game():
                 print('connection')
             print(f'{x},{y}')
 
+        if (keys[pygame.K_LEFT] or keys[pygame.K_a]) and not keys[pygame.K_SPACE]:
+            if x > 0 and [x - one_tile, y] not in no_walk_list:
+                x = x - one_tile
+            elif str(x - one_tile) + ',' + str(y) in connection_dict.keys():
+                x = x - one_tile
+                print('connection')
+            print(f'{x},{y}')
+
+        if (keys[pygame.K_RIGHT] or keys[pygame.K_d]) and not keys[pygame.K_SPACE]:
+            if x < 475 and [x + one_tile, y] not in no_walk_list:
+                x = x + one_tile
+            elif str(x + one_tile) + ',' + str(y) in connection_dict.keys():
+                x = x + one_tile
+                print('connection')
+            print(f'{x},{y}')
+
         # start testing with ai-wandering:
 #         x, y = test_ai.move_mob(prev_x, prev_y, x, y, one_tile, no_walk_list)
-        # store current x and y for this purpose:
-        prev_x = x
-        prev_y = y
 
         if str(x) + ',' + str(y) in connection_dict.keys():
             connection_info = connection_dict[str(x) + ',' + str(y)]
@@ -109,7 +106,24 @@ def start_game():
 #         draw_all_coor(game_window, 'map1.txt', '0', (128,128,128), 'color') # draw all '0' characters as dark gray
         draw_all_coor(game_window, cur_map + '.maplay', '0', ('tile_test.png'), 'picture') # draw all '0' characters as test tile
         pygame.draw.rect(game_window, (255,0,0), (x, y, one_tile, one_tile))  # draw player
+        if keys[pygame.K_SPACE]:
+            if keys[pygame.K_UP] or keys[pygame.K_w]:
+                pygame.draw.rect(game_window, (255,0,0), (x, y - one_tile, one_tile, one_tile))  # draw player
+                print('attack up')
+            elif keys[pygame.K_DOWN] or keys[pygame.K_s]:
+                pygame.draw.rect(game_window, (255,0,0), (x, y + one_tile, one_tile, one_tile))  # draw player
+                print('attack down')
+            elif keys[pygame.K_LEFT] or keys[pygame.K_a]:
+                pygame.draw.rect(game_window, (255,0,0), (x - one_tile, y, one_tile, one_tile))  # draw player
+                print('attack left')
+            elif keys[pygame.K_RIGHT] or keys[pygame.K_d]:
+                pygame.draw.rect(game_window, (255,0,0), (x + one_tile, y, one_tile, one_tile))  # draw player
+                print('attack right')
         pygame.display.update() # update screen
+        
+        # store current x and as previous x and y:
+        prev_x = x
+        prev_y = y
         
     pygame.quit()
 
