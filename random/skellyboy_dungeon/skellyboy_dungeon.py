@@ -107,17 +107,21 @@ def start_game():
         draw_all_coor(game_window, cur_map + '.maplay', '0', ('tile_test.png'), 'picture') # draw all '0' characters as test tile
         pygame.draw.rect(game_window, (255,0,0), (x, y, one_tile, one_tile))  # draw player
         if keys[pygame.K_SPACE]:
+            sword_test = pygame.image.load('test_sword.png').convert_alpha() # load image
             if keys[pygame.K_UP] or keys[pygame.K_w]:
-                pygame.draw.rect(game_window, (255,0,0), (x, y - one_tile, one_tile, one_tile))  # draw player
+                game_window.blit(sword_test, (x, y - one_tile))
                 print('attack up')
             elif keys[pygame.K_DOWN] or keys[pygame.K_s]:
-                pygame.draw.rect(game_window, (255,0,0), (x, y + one_tile, one_tile, one_tile))  # draw player
+                sword_test_down = pygame.transform.rotate(sword_test, 180) # rotate sword downwards
+                game_window.blit(sword_test_down, (x, y + one_tile))
                 print('attack down')
             elif keys[pygame.K_LEFT] or keys[pygame.K_a]:
-                pygame.draw.rect(game_window, (255,0,0), (x - one_tile, y, one_tile, one_tile))  # draw player
+                sword_test_left = pygame.transform.rotate(sword_test, 90) # rotate sword to the left
+                game_window.blit(sword_test_left, (x - one_tile, y))
                 print('attack left')
             elif keys[pygame.K_RIGHT] or keys[pygame.K_d]:
-                pygame.draw.rect(game_window, (255,0,0), (x + one_tile, y, one_tile, one_tile))  # draw player
+                sword_test_right = pygame.transform.rotate(sword_test, 270) # rotate sword to the right
+                game_window.blit(sword_test_right, (x + one_tile, y))
                 print('attack right')
         pygame.display.update() # update screen
         
