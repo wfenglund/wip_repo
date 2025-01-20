@@ -21,6 +21,19 @@ def parse_mapinf(map_file):
                 connection_dict[coords] = new_loc.split(':')
     return connection_dict
 
+def maintain_mob(game_window, mob_list):
+    one_tile = 25
+    new_mob_list = []
+    for mob in mob_list:
+        if mob['status'] == 'attacked': # do something if mob is attacked
+#             pygame.draw.rect(game_window, (255, 0, 0), (mob['coords'][0], mob['coords'][1], one_tile, one_tile))
+            mob['status'] = 'normal'
+        pygame.draw.rect(game_window, (255, 255, 255), (mob['coords'][0], mob['coords'][1], one_tile, one_tile))
+        if mob['hitpoints'] > 0:
+            new_mob_list = new_mob_list + [mob]
+    return new_mob_list
+        
+
 def draw_all_coor(game_window, map_file, character, color, choice):
     one_tile = 25
     if choice == 'color':
@@ -46,6 +59,13 @@ def start_game():
     prev_y = y
     cur_map = 'map1' # prefix name of the starting map
 
+    # Mob list:
+    mob1 = {}
+    mob1['coords'] = [125, 125]
+    mob1['hitpoints'] = 10
+    mob1['status'] = 'normal'
+    mob_list = [mob1]
+
     # Start game loop:
     while run:
         pygame.time.delay(75) # determine game speed
@@ -56,6 +76,7 @@ def start_game():
                 print('Game Closed')
 
         no_walk_list = translate_map_char(cur_map + '.maplay', '#') # find unwalkable tiles
+        no_walk_list = no_walk_list + [i['coords'] for i in mob_list]
         connection_dict = parse_mapinf(cur_map + '.mapinf')
 
         keys = pygame.key.get_pressed()
@@ -106,23 +127,42 @@ def start_game():
 #         draw_all_coor(game_window, 'map1.txt', '0', (128,128,128), 'color') # draw all '0' characters as dark gray
         draw_all_coor(game_window, cur_map + '.maplay', '0', ('tile_test.png'), 'picture') # draw all '0' characters as test tile
         pygame.draw.rect(game_window, (255,0,0), (x, y, one_tile, one_tile))  # draw player
+
+        attack_coords = 'undefined'
         if keys[pygame.K_SPACE]:
             sword_test = pygame.image.load('test_sword.png').convert_alpha() # load image
             if keys[pygame.K_UP] or keys[pygame.K_w]:
-                game_window.blit(sword_test, (x, y - one_tile))
+                attack_coords = [x, y - one_tile]
+                game_window.blit(sword_test, (attack_coords[0], attack_coords[1]))
                 print('attack up')
             elif keys[pygame.K_DOWN] or keys[pygame.K_s]:
+                attack_coords = [x, y + one_tile]
                 sword_test_down = pygame.transform.rotate(sword_test, 180) # rotate sword downwards
-                game_window.blit(sword_test_down, (x, y + one_tile))
+                game_window.blit(sword_test_down, (attack_coords[0], attack_coords[1]))
                 print('attack down')
             elif keys[pygame.K_LEFT] or keys[pygame.K_a]:
+                attack_coords = [x - one_tile, y]
                 sword_test_left = pygame.transform.rotate(sword_test, 90) # rotate sword to the left
-                game_window.blit(sword_test_left, (x - one_tile, y))
+                game_window.blit(sword_test_left, (attack_coords[0], attack_coords[1]))
                 print('attack left')
             elif keys[pygame.K_RIGHT] or keys[pygame.K_d]:
+                attack_coords = [x + one_tile, y]
                 sword_test_right = pygame.transform.rotate(sword_test, 270) # rotate sword to the right
-                game_window.blit(sword_test_right, (x + one_tile, y))
+                game_window.blit(sword_test_right, (attack_coords[0], attack_coords[1]))
                 print('attack right')
+
+
+        if attack_coords != 'undefined':
+            new_mob_list = []
+            for mob in mob_list:
+                if mob['coords'] == attack_coords:
+                    mob['hitpoints'] = mob['hitpoints'] - 1
+                    mob['status'] = 'attacked'
+                new_mob_list = new_mob_list + [mob]
+            mob_list = new_mob_list
+
+        mob_list = maintain_mob(game_window, mob_list)
+
         pygame.display.update() # update screen
         
         # store current x and as previous x and y:
