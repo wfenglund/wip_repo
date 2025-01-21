@@ -133,24 +133,19 @@ def start_game():
             sword_test = pygame.image.load('test_sword.png').convert_alpha() # load image
             if keys[pygame.K_UP] or keys[pygame.K_w]:
                 attack_coords = [x, y - one_tile]
-                game_window.blit(sword_test, (attack_coords[0], attack_coords[1]))
                 print('attack up')
             elif keys[pygame.K_DOWN] or keys[pygame.K_s]:
                 attack_coords = [x, y + one_tile]
-                sword_test_down = pygame.transform.rotate(sword_test, 180) # rotate sword downwards
-                game_window.blit(sword_test_down, (attack_coords[0], attack_coords[1]))
+                sword_test = pygame.transform.rotate(sword_test, 180) # rotate sword downwards
                 print('attack down')
             elif keys[pygame.K_LEFT] or keys[pygame.K_a]:
                 attack_coords = [x - one_tile, y]
-                sword_test_left = pygame.transform.rotate(sword_test, 90) # rotate sword to the left
-                game_window.blit(sword_test_left, (attack_coords[0], attack_coords[1]))
+                sword_test = pygame.transform.rotate(sword_test, 90) # rotate sword to the left
                 print('attack left')
             elif keys[pygame.K_RIGHT] or keys[pygame.K_d]:
                 attack_coords = [x + one_tile, y]
-                sword_test_right = pygame.transform.rotate(sword_test, 270) # rotate sword to the right
-                game_window.blit(sword_test_right, (attack_coords[0], attack_coords[1]))
+                sword_test = pygame.transform.rotate(sword_test, 270) # rotate sword to the right
                 print('attack right')
-
 
         if attack_coords != 'undefined':
             new_mob_list = []
@@ -162,6 +157,9 @@ def start_game():
             mob_list = new_mob_list
 
         mob_list = maintain_mob(game_window, mob_list)
+        
+        if attack_coords != 'undefined':
+            game_window.blit(sword_test, (attack_coords[0], attack_coords[1]))
 
         pygame.display.update() # update screen
         
