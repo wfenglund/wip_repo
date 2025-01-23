@@ -65,6 +65,7 @@ def start_game():
     mob1['hitpoints'] = 10
     mob1['status'] = 'normal'
     mob_list = [mob1]
+    mob_delayer = 1
 
     # Start game loop:
     while run:
@@ -126,6 +127,30 @@ def start_game():
             coord_list = connection_info[1].split(',')
             x = int(coord_list[0].strip())
             y = int(coord_list[1].strip())
+        
+        if mob_delayer == 1: # make this whole indentation into a function
+            new_mob_list = []
+            for mob in mob_list:
+                mob_x = mob['coords'][0]
+                mob_y = mob['coords'][1]
+                x_diff = mob_x - x
+                y_diff = mob_y - y
+                if x_diff > 0:
+                    mob_x = mob_x - one_tile
+                elif x_diff < 0:
+                    mob_x = mob_x + one_tile
+                if y_diff > 0:
+                    mob_y = mob_y - one_tile
+                elif y_diff < 0:
+                    mob_y = mob_y + one_tile
+                if [mob_x, mob_y] != [x, y] and [mob_x, mob_y] not in no_walk_list:
+                    mob['coords'] = [mob_x, mob_y]
+                new_mob_list = new_mob_list + [mob]
+            mob_list = new_mob_list
+            
+        mob_delayer = mob_delayer + 1
+        if mob_delayer > 3:
+            mob_delayer = 1
 
         game_window.fill((0,0,0))  # fill screen with black
 #         draw_all_coor(game_window, 'map1.txt', '0', (128,128,128), 'color') # draw all '0' characters as dark gray
