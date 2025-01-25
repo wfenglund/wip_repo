@@ -25,10 +25,13 @@ def maintain_mob(game_window, mob_list):
     one_tile = 25
     new_mob_list = []
     for mob in mob_list:
+        pygame.draw.rect(game_window, (255, 255, 255), (mob['coords'][0], mob['coords'][1], one_tile, one_tile))
         if mob['status'] == 'attacked': # do something if mob is attacked
+            hit_font = pygame.font.SysFont('Comic Sans MS', 30)
+            hit_surface = hit_font.render('-' + str(mob['damage']), False, (255, 0, 0)) # draw hitsplat
+            game_window.blit(hit_surface, (mob['coords'][0], mob['coords'][1]))
 #             pygame.draw.rect(game_window, (255, 0, 0), (mob['coords'][0], mob['coords'][1], one_tile, one_tile))
             mob['status'] = 'normal'
-        pygame.draw.rect(game_window, (255, 255, 255), (mob['coords'][0], mob['coords'][1], one_tile, one_tile))
         if mob['hitpoints'] > 0:
             new_mob_list = new_mob_list + [mob]
     return new_mob_list
@@ -49,6 +52,7 @@ def start_game():
     pygame.init()
     game_window = pygame.display.set_mode((500, 500))
     pygame.display.set_caption("Skellyboy Dungeon")
+    pygame.font.init()
 
     # Assign variables:
     x = 250 # starting x coordinate
@@ -182,6 +186,7 @@ def start_game():
                 if mob['coords'] == attack_coords:
                     mob['hitpoints'] = mob['hitpoints'] - 1
                     mob['status'] = 'attacked'
+                    mob['damage'] = 1
                     mob['coords'][0] = mob['coords'][0] + (mob['coords'][0] - x) * 2 # make mob bounce back from being hit
                     mob['coords'][1] = mob['coords'][1] + (mob['coords'][1] - y) * 2 # -"-
                 new_mob_list = new_mob_list + [mob]
