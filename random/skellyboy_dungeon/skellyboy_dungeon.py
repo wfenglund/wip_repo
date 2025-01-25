@@ -62,7 +62,7 @@ def start_game():
     # Mob list:
     mob1 = {}
     mob1['coords'] = [125, 125]
-    mob1['hitpoints'] = 10
+    mob1['hitpoints'] = 5
     mob1['status'] = 'normal'
     mob_list = [mob1]
     mob_delayer = 1
@@ -182,6 +182,8 @@ def start_game():
                 if mob['coords'] == attack_coords:
                     mob['hitpoints'] = mob['hitpoints'] - 1
                     mob['status'] = 'attacked'
+                    mob['coords'][0] = mob['coords'][0] + (mob['coords'][0] - x) * 2 # make mob bounce back from being hit
+                    mob['coords'][1] = mob['coords'][1] + (mob['coords'][1] - y) * 2 # -"-
                 new_mob_list = new_mob_list + [mob]
             mob_list = new_mob_list
 
