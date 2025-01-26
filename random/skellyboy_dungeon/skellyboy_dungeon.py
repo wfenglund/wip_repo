@@ -62,6 +62,7 @@ def start_game():
     prev_x = x
     prev_y = y
     cur_map = 'map1' # prefix name of the starting map
+    weapong_dmg = 2 # assign how much damage attacking does does
 
     # Mob list:
     mob1 = {}
@@ -184,9 +185,13 @@ def start_game():
             new_mob_list = []
             for mob in mob_list:
                 if mob['coords'] == attack_coords:
-                    mob['hitpoints'] = mob['hitpoints'] - 1
                     mob['status'] = 'attacked'
-                    mob['damage'] = 1
+                    if weapong_dmg < mob['hitpoints']:
+                        mob['damage'] = weapong_dmg
+                    else:
+                        mob['damage'] = mob['hitpoints']
+                    mob['hitpoints'] = mob['hitpoints'] - weapong_dmg
+#                     mob['damage'] = weapong_dmg
                     mob['coords'][0] = mob['coords'][0] + (mob['coords'][0] - x) * 2 # make mob bounce back from being hit
                     mob['coords'][1] = mob['coords'][1] + (mob['coords'][1] - y) * 2 # -"-
                 new_mob_list = new_mob_list + [mob]
