@@ -21,11 +21,33 @@ def parse_mapinf(map_file):
                 connection_dict[coords] = new_loc.split(':')
     return connection_dict
 
-def maintain_mob(game_window, mob_list):
+def maintain_mob(game_window, mob_list, player_coords, attack_coords, weapon_dmg):
     one_tile = 25
+
+    if attack_coords != 'undefined': # if player is attacking
+        new_mob_list = []
+        for mob in mob_list:
+            if mob['coords'] == attack_coords:
+                mob['status'] = 'attacked'
+                if weapon_dmg < mob['hitpoints']:
+                    mob['damage'] = weapon_dmg
+                else:
+                    mob['damage'] = mob['hitpoints']
+                mob['hitpoints'] = mob['hitpoints'] - weapon_dmg
+                mob['coords'][0] = mob['coords'][0] + (mob['coords'][0] - player_coords[0]) * 2 # make mob bounce back from being hit
+                mob['coords'][1] = mob['coords'][1] + (mob['coords'][1] - player_coords[1]) * 2 # -"-
+            new_mob_list = new_mob_list + [mob]
+        mob_list = new_mob_list
+ 
     new_mob_list = []
     for mob in mob_list:
+        # draw mob:
         pygame.draw.rect(game_window, (255, 255, 255), (mob['coords'][0], mob['coords'][1], one_tile, one_tile))
+        
+        # add hitpoints bar:
+        pygame.draw.rect(game_window, (255, 0, 0), (mob['coords'][0], mob['coords'][1], one_tile, one_tile / 10))
+        pygame.draw.rect(game_window, (0, 255, 0), (mob['coords'][0], mob['coords'][1], one_tile * (mob['hitpoints'] / mob['max_hp']), one_tile / 10))
+
         if mob['status'] == 'attacked': # do something if mob is attacked
             hit_font = pygame.font.SysFont('Comic Sans MS', 30)
             hit_surface = hit_font.render('-' + str(mob['damage']), False, (255, 0, 0)) # draw hitsplat
@@ -62,12 +84,13 @@ def start_game():
     prev_x = x
     prev_y = y
     cur_map = 'map1' # prefix name of the starting map
-    weapong_dmg = 2 # assign how much damage attacking does does
+    weapon_dmg = 2 # assign how much damage attacking does does
 
     # Mob list:
     mob1 = {}
     mob1['coords'] = [125, 125]
-    mob1['hitpoints'] = 5
+    mob1['max_hp'] = 5
+    mob1['hitpoints'] = mob1['max_hp']
     mob1['status'] = 'normal'
     mob_list = [mob1]
     mob_delayer = 1
@@ -181,23 +204,7 @@ def start_game():
                 sword_test = pygame.transform.rotate(sword_test, 270) # rotate sword to the right
                 print('attack right')
 
-        if attack_coords != 'undefined':
-            new_mob_list = []
-            for mob in mob_list:
-                if mob['coords'] == attack_coords:
-                    mob['status'] = 'attacked'
-                    if weapong_dmg < mob['hitpoints']:
-                        mob['damage'] = weapong_dmg
-                    else:
-                        mob['damage'] = mob['hitpoints']
-                    mob['hitpoints'] = mob['hitpoints'] - weapong_dmg
-#                     mob['damage'] = weapong_dmg
-                    mob['coords'][0] = mob['coords'][0] + (mob['coords'][0] - x) * 2 # make mob bounce back from being hit
-                    mob['coords'][1] = mob['coords'][1] + (mob['coords'][1] - y) * 2 # -"-
-                new_mob_list = new_mob_list + [mob]
-            mob_list = new_mob_list
-
-        mob_list = maintain_mob(game_window, mob_list)
+        mob_list = maintain_mob(game_window, mob_list, [x, y], attack_coords, weapon_dmg)
         
         if attack_coords != 'undefined':
             game_window.blit(sword_test, (attack_coords[0], attack_coords[1]))
