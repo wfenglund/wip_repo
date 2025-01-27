@@ -21,7 +21,7 @@ def parse_mapinf(map_file):
                 connection_dict[coords] = new_loc.split(':')
     return connection_dict
 
-def maintain_mob(game_window, mob_list, player_coords, attack_coords, weapon_dmg):
+def maintain_mob(game_window, mob_list, player_coords, attack_coords, weapon_dmg, no_walk_list):
     one_tile = 25
 
     if attack_coords != 'undefined': # if player is attacking
@@ -34,8 +34,17 @@ def maintain_mob(game_window, mob_list, player_coords, attack_coords, weapon_dmg
                 else:
                     mob['damage'] = mob['hitpoints']
                 mob['hitpoints'] = mob['hitpoints'] - weapon_dmg
-                mob['coords'][0] = mob['coords'][0] + (mob['coords'][0] - player_coords[0]) * 2 # make mob bounce back from being hit
-                mob['coords'][1] = mob['coords'][1] + (mob['coords'][1] - player_coords[1]) * 2 # -"-
+
+                # make mobs bounce back from being hit but not into walls:
+                bounce_back = 2
+                old_x, old_y = mob['coords']
+                x_bounce, y_bounce = [0, 0]
+                while bounce_back > 0:
+                    if [old_x + x_bounce + (old_x - player_coords[0]), old_y + y_bounce + (old_y - player_coords[1])] not in no_walk_list:
+                        x_bounce = x_bounce + (old_x - player_coords[0])
+                        y_bounce = y_bounce + (old_y - player_coords[1])
+                    bounce_back = bounce_back - 1
+                mob['coords'] = [old_x + x_bounce, old_y + y_bounce]
             new_mob_list = new_mob_list + [mob]
         mob_list = new_mob_list
  
@@ -204,7 +213,7 @@ def start_game():
                 sword_test = pygame.transform.rotate(sword_test, 270) # rotate sword to the right
                 print('attack right')
 
-        mob_list = maintain_mob(game_window, mob_list, [x, y], attack_coords, weapon_dmg)
+        mob_list = maintain_mob(game_window, mob_list, [x, y], attack_coords, weapon_dmg, no_walk_list)
         
         if attack_coords != 'undefined':
             game_window.blit(sword_test, (attack_coords[0], attack_coords[1]))
