@@ -51,7 +51,9 @@ def maintain_mob(game_window, mob_list, player_coords, attack_coords, weapon_dmg
     new_mob_list = []
     for mob in mob_list:
         # draw mob:
-        pygame.draw.rect(game_window, (255, 255, 255), (mob['coords'][0], mob['coords'][1], one_tile, one_tile))
+#         pygame.draw.rect(game_window, (255, 255, 255), (mob['coords'][0], mob['coords'][1], one_tile, one_tile))
+        skellyboy_test = pygame.image.load('skellyboy_test_2.png').convert_alpha() # load image
+        game_window.blit(skellyboy_test, (mob['coords'][0], mob['coords'][1]))
         
         # add hitpoints bar:
         pygame.draw.rect(game_window, (255, 0, 0), (mob['coords'][0], mob['coords'][1], one_tile, one_tile / 10))
