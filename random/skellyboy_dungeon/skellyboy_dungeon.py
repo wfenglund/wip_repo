@@ -52,7 +52,12 @@ def maintain_mob(game_window, mob_list, player_coords, attack_coords, weapon_dmg
     for mob in mob_list:
         # draw mob:
 #         pygame.draw.rect(game_window, (255, 255, 255), (mob['coords'][0], mob['coords'][1], one_tile, one_tile))
-        skellyboy_test = pygame.image.load('skeleton_front.png').convert_alpha() # load image
+        if mob['facing'] == 'front':
+            skellyboy_test = pygame.image.load('skeleton_front.png').convert_alpha() # load image
+        elif mob['facing'] == 'back':
+            skellyboy_test = pygame.image.load('skeleton_back.png').convert_alpha() # load image
+        else:
+            skellyboy_test = pygame.image.load('skeleton_front.png').convert_alpha() # load image
         game_window.blit(skellyboy_test, (mob['coords'][0], mob['coords'][1]))
         
         # add hitpoints bar:
@@ -180,8 +185,10 @@ def start_game():
                     mob_x = mob_x + one_tile
                 if y_diff > 0:
                     mob_y = mob_y - one_tile
+                    mob['facing'] = 'back'
                 elif y_diff < 0:
                     mob_y = mob_y + one_tile
+                    mob['facing'] = 'front'
                 if [mob_x, mob_y] != [x, y] and [mob_x, mob_y] not in no_walk_list:
                     mob['coords'] = [mob_x, mob_y]
                 new_mob_list = new_mob_list + [mob]
