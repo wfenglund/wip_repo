@@ -52,10 +52,14 @@ def maintain_mob(game_window, mob_list, player_coords, attack_coords, weapon_dmg
     for mob in mob_list:
         # draw mob:
 #         pygame.draw.rect(game_window, (255, 255, 255), (mob['coords'][0], mob['coords'][1], one_tile, one_tile))
-        if mob['facing'] == 'front':
-            skellyboy_test = pygame.image.load('skeleton_front.png').convert_alpha() # load image
+        if mob['facing'] == 'left':
+            skellyboy_test = pygame.image.load('skeleton_left.png').convert_alpha() # load image
+        elif mob['facing'] == 'right':
+            skellyboy_test = pygame.image.load('skeleton_right.png').convert_alpha() # load image
         elif mob['facing'] == 'back':
             skellyboy_test = pygame.image.load('skeleton_back.png').convert_alpha() # load image
+        elif mob['facing'] == 'front':
+            skellyboy_test = pygame.image.load('skeleton_front.png').convert_alpha() # load image
         else:
             skellyboy_test = pygame.image.load('skeleton_front.png').convert_alpha() # load image
         game_window.blit(skellyboy_test, (mob['coords'][0], mob['coords'][1]))
@@ -181,8 +185,10 @@ def start_game():
                 y_diff = mob_y - y
                 if x_diff > 0:
                     mob_x = mob_x - one_tile
+                    mob['facing'] = 'left'
                 elif x_diff < 0:
                     mob_x = mob_x + one_tile
+                    mob['facing'] = 'right'
                 if y_diff > 0:
                     mob_y = mob_y - one_tile
                     mob['facing'] = 'back'
