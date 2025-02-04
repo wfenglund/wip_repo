@@ -112,7 +112,12 @@ def start_game():
     mob1['max_hp'] = 5
     mob1['hitpoints'] = mob1['max_hp']
     mob1['status'] = 'normal'
-    mob_list = [mob1]
+    mob2 = {}
+    mob2['coords'] = [150, 150]
+    mob2['max_hp'] = 5
+    mob2['hitpoints'] = mob2['max_hp']
+    mob2['status'] = 'normal'
+    mob_list = [mob1, mob2]
     mob_delayer = 1
 
     # Start game loop:
@@ -196,7 +201,10 @@ def start_game():
                     mob_y = mob_y + one_tile
                     mob['facing'] = 'front'
                 if [mob_x, mob_y] != [x, y] and [mob_x, mob_y] not in no_walk_list:
+                    if mob['coords'] in no_walk_list:
+                        no_walk_list.pop(no_walk_list.index(mob['coords']))
                     mob['coords'] = [mob_x, mob_y]
+                    no_walk_list = no_walk_list + [mob['coords']]
                 new_mob_list = new_mob_list + [mob]
             mob_list = new_mob_list
             
