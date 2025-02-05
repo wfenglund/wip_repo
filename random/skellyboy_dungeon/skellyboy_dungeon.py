@@ -53,15 +53,15 @@ def maintain_mob(game_window, mob_list, player_coords, attack_coords, weapon_dmg
         # draw mob:
 #         pygame.draw.rect(game_window, (255, 255, 255), (mob['coords'][0], mob['coords'][1], one_tile, one_tile))
         if mob['facing'] == 'left':
-            skellyboy_test = pygame.image.load('skeleton_left.png').convert_alpha() # load image
+            skellyboy_test = pygame.image.load('./images/' + 'skeleton_left.png').convert_alpha() # load image
         elif mob['facing'] == 'right':
-            skellyboy_test = pygame.image.load('skeleton_right.png').convert_alpha() # load image
+            skellyboy_test = pygame.image.load('./images/' + 'skeleton_right.png').convert_alpha() # load image
         elif mob['facing'] == 'back':
-            skellyboy_test = pygame.image.load('skeleton_back.png').convert_alpha() # load image
+            skellyboy_test = pygame.image.load('./images/' + 'skeleton_back.png').convert_alpha() # load image
         elif mob['facing'] == 'front':
-            skellyboy_test = pygame.image.load('skeleton_front.png').convert_alpha() # load image
+            skellyboy_test = pygame.image.load('./images/' + 'skeleton_front.png').convert_alpha() # load image
         else:
-            skellyboy_test = pygame.image.load('skeleton_front.png').convert_alpha() # load image
+            skellyboy_test = pygame.image.load('./images/' + 'skeleton_front.png').convert_alpha() # load image
         game_window.blit(skellyboy_test, (mob['coords'][0], mob['coords'][1]))
         
         # add hitpoints bar:
@@ -129,9 +129,9 @@ def start_game():
                 run = False  # end game loop
                 print('Game Closed')
 
-        no_walk_list = translate_map_char(cur_map + '.maplay', '#') # find unwalkable tiles
+        no_walk_list = translate_map_char('./maps/' + cur_map + '.maplay', '#') # find unwalkable tiles
         no_walk_list = no_walk_list + [i['coords'] for i in mob_list]
-        connection_dict = parse_mapinf(cur_map + '.mapinf')
+        connection_dict = parse_mapinf('./maps/' + cur_map + '.mapinf')
 
         keys = pygame.key.get_pressed()
         
@@ -214,12 +214,12 @@ def start_game():
 
         game_window.fill((0,0,0))  # fill screen with black
 #         draw_all_coor(game_window, 'map1.txt', '0', (128,128,128), 'color') # draw all '0' characters as dark gray
-        draw_all_coor(game_window, cur_map + '.maplay', '0', ('tile_test.png'), 'picture') # draw all '0' characters as test tile
+        draw_all_coor(game_window, './maps/' + cur_map + '.maplay', '0', ('./images/' + 'tile_test.png'), 'picture') # draw all '0' characters as test tile
         pygame.draw.rect(game_window, (255,0,0), (x, y, one_tile, one_tile))  # draw player
 
         attack_coords = 'undefined'
         if keys[pygame.K_SPACE]:
-            sword_test = pygame.image.load('test_sword.png').convert_alpha() # load image
+            sword_test = pygame.image.load('./images/' + 'test_sword.png').convert_alpha() # load image
             if keys[pygame.K_UP] or keys[pygame.K_w]:
                 attack_coords = [x, y - one_tile]
                 print('attack up')
